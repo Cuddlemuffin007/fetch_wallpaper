@@ -123,8 +123,11 @@ func main() {
                 os.Exit(6)
             }
         default:
-            // TODO
-            fmt.Println("Image downloaded, but setting as wallpaper is not implemented for Linux systems.")
+            err := util.SetBackgroundLinux(fullFilePath)
+            if err != nil {
+                fmt.Fprintf(os.Stderr, "An error occured while attempting to set %s as wallpaper.\n", fullFilePath)
+                os.Exit(6)
+            }
         }
     } else {
         fmt.Fprintf(os.Stdout, "Could not find an image. Try again later.\n")

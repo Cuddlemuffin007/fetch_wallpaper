@@ -43,3 +43,10 @@ func ExpandPath(path string) (string, error) {
 func SetBackgroundMacOS(filePath string) error {
     return exec.Command("osascript", "-e", `tell application "Finder" to set desktop picture to POSIX file ` + strconv.Quote(filePath)).Run()
 }
+
+
+// not a full solution because this will (probably) only work on Ubuntu since that what I primarily use.
+// TODO: add support for other common distros
+func SetBackgroundLinux(filePath string) error {
+    return exec.Command("gsettings", "set", "org.gnome.desktop.background", "picture-uri", strconv.Quote("file://" + filePath)).Run()
+}
