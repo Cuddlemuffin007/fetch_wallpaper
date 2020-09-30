@@ -16,7 +16,7 @@ import (
 )
 
 const BaseUrl string = "https://www.reddit.com/"
-var ImgUrlRE = regexp.MustCompile(`i\.imgur\.com/(?P<name>\w+)\.(?P<ext>jpg|png)$`)
+var ImgUrlRE = regexp.MustCompile(`https://i\.(imgur\.com|redd\.it)/(?P<name>\w+)\.(?P<ext>jpg|png)$`)
 
 
 func main() {
@@ -43,14 +43,14 @@ func main() {
     client := web.Client()
     // initialize the response struct
     res := web.RedditResponse{}
-    // format url to fetch JSON data from
+    // format url from which to fetch JSON data
     url := fmt.Sprintf("%s%s.json", BaseUrl, *targetPtr)
     // make the request, returning an error if unsuccessful, otherwise read response body into the res struct
     if err := web.FetchJSONResponse(url, client, &res); err != nil {
         util.HandleError(err)
     }
 
-    // filter posts to feature only those hosted by imgur
+    // filter posts to feature only those hosted by imgur or i.redd.it
     var targetImageUrls []string
     for _, child := range res.Data.Children {
         if ImgUrlRE.MatchString(child.Data.Url) {
